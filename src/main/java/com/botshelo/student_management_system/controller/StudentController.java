@@ -2,19 +2,23 @@ package com.botshelo.student_management_system.controller;
 
 import com.botshelo.student_management_system.model.Student;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 
-@RestController
+@Controller
 public class StudentController {
 
-    @GetMapping("/student")
-    public Student getStudent() {
+    @GetMapping("/student/profile")
+    public String getStudentProfile(Model model) {
 
-        return new Student(
+        Student student = new Student(
                 1L,
                 "Botshelo",
                 "Mogale",
                 "botshelo@example.com"
         );
+        model.addAttribute("student", student);
+
+        return "student-profile";
     }
 }
