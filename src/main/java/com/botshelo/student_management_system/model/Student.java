@@ -1,8 +1,20 @@
 package com.botshelo.student_management_system.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+//This Java class should be represented in the database//
+@Entity
 public class Student {
 
+    //unique identifier for each student.
+    @Id
+    //database generates the ID.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String name;
     private String surname;
     private String email;
