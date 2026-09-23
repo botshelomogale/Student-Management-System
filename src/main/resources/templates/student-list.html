@@ -16,6 +16,7 @@
                 <th>Name</th>
                 <th>Surname</th>
                 <th>Email</th>
+                <th>Action</th>
             </tr>
         </thead>
 
@@ -25,6 +26,11 @@
                 <td th:text="${student.name}"></td>
                 <td th:text="${student.surname}"></td>
                 <td th:text="${student.email}"></td>
+                <td>
+                    <a th:href = @{/admin/students/{id}/edit(id=${student.id})}>
+                        Edit 
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -6,6 +6,7 @@ import com.botshelo.student_management_system.repository.StudentRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class StudentController {
@@ -36,23 +37,43 @@ public class StudentController {
         model.addAttribute("students", studentRepository.findAll());
 
         return "student-list";
-}
+    }
+    @GetMapping("/admin/students/{id}/edit")
+    public String showEditStudentForm(
+        @PathVariable Long id,
+        Model model) {
 
-    @PostMapping("/admin/students")
-    public String addStudent(
-            String name,
-            String surname,
-            String email) {
+        Student student = studentRepository.findById(id)
+            .orElseThrow();
 
-        Student student = new Student(
-                null,
-                name,
-                surname,
-                email
-        );
+        model.addAttribute("student", student);
 
-        studentRepository.save(student);
+        return "edit-student";
+    }
 
-        return "redirect:/admin/students/add";
+@PostMapping("/admin/students")
+public String saveStudent(
+        Long id,
+        String name,
+        String surname,
+        String email) {
+
+    Student student;
+
+    if (id != null) {
+        student = studentRepository.findById(id)
+                .orElseThrow();
+    } else {
+        student = new Student();
+    }
+
+    student.setName(name);
+    student.setSurname(surname);
+    student.setEmail(email);
+
+    studentRepository.save(student);
+
+    return "redirect:/admin/students";
+
 }
 }
