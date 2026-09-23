@@ -30,6 +30,12 @@
                     <a th:href = @{/admin/students/{id}/edit(id=${student.id})}>
                         Edit 
                     </a>
+                    <form th:action="@{'/admin/students/' + ${student.id} + '/delete'}"
+                            method="post"
+                            style="display:inline;">
+
+                    <button type = "submit">Delete</button>
+                </form>
                 </td>
             </tr>
         </tbody>

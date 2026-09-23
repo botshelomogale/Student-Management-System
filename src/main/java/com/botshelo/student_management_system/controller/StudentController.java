@@ -75,5 +75,13 @@ public String saveStudent(
 
     return "redirect:/admin/students";
 
-}
+    }
+
+@PostMapping("/admin/students/{id}/delete")
+public String deleteStudent(@PathVariable Long id) {
+
+    studentRepository.deleteById(id);
+
+    return "redirect:/admin/students";
+    }
 }
