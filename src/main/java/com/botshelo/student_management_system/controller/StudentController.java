@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import com.botshelo.student_management_system.dto.StudentDto;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class StudentController {
@@ -28,7 +32,8 @@ public class StudentController {
         return "student-profile";
     }
     @GetMapping("/admin/students/add")
-    public String showAddStudentForm() {
+    public String showAddStudentForm(Model model) {
+        model.addAttribute("studentDto", new StudentDto());
         return "add-student";
     }
     @GetMapping("/admin/students")
@@ -51,37 +56,66 @@ public class StudentController {
         return "edit-student";
     }
 
-@PostMapping("/admin/students")
-public String saveStudent(
-        Long id,
-        String name,
-        String surname,
-        String email) {
+    // @PostMapping("/admin/students")
+    // public String saveStudent(
+    //         Long id,
+    //         String name,
+    //         String surname,
+    //         String email) {
 
-    Student student;
+    //     Student student;
 
-    if (id != null) {
-        student = studentRepository.findById(id)
-                .orElseThrow();
-    } else {
-        student = new Student();
-    }
+    //     if (id != null) {
+    //         student = studentRepository.findById(id)
+    //                 .orElseThrow();
+    //     } else {
+    //         student = new Student();
+    //     }
 
-    student.setName(name);
-    student.setSurname(surname);
-    student.setEmail(email);
+    //     student.setName(name);
+    //     student.setSurname(surname);
+    //     student.setEmail(email);
 
-    studentRepository.save(student);
+    //     studentRepository.save(student);
 
-    return "redirect:/admin/students";
+    //     return "redirect:/admin/students";
 
-    }
+    //     }
+    @PostMapping("/admin/students")
+    public String saveStudent(
+            @Valid @ModelAttribute("studentDto") StudentDto studentDto,
+            BindingResult bindingResult,
+            Long id,
+            Model model) {
 
-@PostMapping("/admin/students/{id}/delete")
-public String deleteStudent(@PathVariable Long id) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("student", studentDto);
+            return id != null ? "edit-student" : "add-student";
+        }
 
-    studentRepository.deleteById(id);
+        Student student;
 
-    return "redirect:/admin/students";
-    }
+        if (id != null) {
+            student = studentRepository.findById(id)
+                    .orElseThrow();
+        } else {
+            student = new Student();
+        }
+
+        student.setName(studentDto.getName());
+        student.setSurname(studentDto.getSurname());
+        student.setEmail(studentDto.getEmail());
+
+        studentRepository.save(student);
+
+        return "redirect:/admin/students";
+}
+
+    @PostMapping("/admin/students/{id}/delete")
+    public String deleteStudent(@PathVariable Long id) {
+
+        studentRepository.deleteById(id);
+
+        return "redirect:/admin/students";
+        }
 }
