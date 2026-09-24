@@ -51,7 +51,14 @@ public class StudentController {
         Student student = studentRepository.findById(id)
             .orElseThrow();
 
-        model.addAttribute("student", student);
+         StudentDto studentDto = new StudentDto(
+            student.getName(),
+            student.getSurname(),
+            student.getEmail()
+    );
+
+            model.addAttribute("studentDto", studentDto);
+            model.addAttribute("studentId", student.getId());
 
         return "edit-student";
     }
