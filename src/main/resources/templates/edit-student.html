@@ -9,8 +9,8 @@
 
     <h1>Edit Student</h1>
 
-    <form th:aaction="@{/admin/students}"
-    `       th:object="${studentDto}"
+    <form th:action="@{/admin/students}"
+           th:object="${studentDto}"
             method="post">
 
         <input type="hidden" name="id" th:value="${studentId}">
